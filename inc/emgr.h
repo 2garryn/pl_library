@@ -65,28 +65,39 @@ uint8_t emgr_is_ok(emgr_err_struct * estruct);
 //reset values of error strcut
 void emgr_reset(emgr_err_struct * estruct);
 
+// return OK from void function
 #define RET_OK(type) emgr_ok(&emgr_struct, type); \
   return
 
+// return ok with result of function
+#define RET_VALUE_OK(type, value) emgr_ok(&emgr_struct, type);	\
+  return value
+
+// return error as result of function. With descriprion
 #define RET_ERROR_DESC(type, code, desc) emgr_error1(&emgr_struct, type, code, desc); \
   emgr_print_ffl(&emgr_struct, __FILE__, __FUNCTION__, __LINE__);		\
   return
 
+// return simple error from function
 #define RET_ERROR(type, code) emgr_error2(&emgr_struct, type, code); \
   emgr_print_ffl(&emgr_struct, __FILE__, __FUNCTION__, __LINE__); \
   return
 
+// return with error from current function if nested function returned error
 #define RET_ON_PREV_ERROR if(emgr_is_error(&emgr_struct)) {		\
   emgr_print_ffl(&emgr_struct, __FILE__, __FUNCTION__, __LINE__);	  \
   return; };
 
+// return with error from current function if nested function returned error. Possible to change type and code of error
 #define RET_ON_PREV_ERROR_NC(type, code) if(emgr_is_error(&emgr_struct)){	\
   emgr_error2(&emgr_struct, type, code); \
   emgr_print_ffl(&emgr_struct, __FILE__, __FUNCTION__, __LINE__);	  \
   return }
 
+// test result on error
 #define IS_ERROR emgr_is_error(&emgr_struct)
 
+// test result on ok
 #define IS_OK emgr_is_ok(&emgr_struct)
 
 

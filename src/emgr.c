@@ -15,14 +15,13 @@ void emgr_error1(emgr_err_struct * estruct, emgr_err_type type, uint8_t code, ch
   estruct->type = type;
   estruct->code = code;
   memcpy(estruct->desc, desc, sizeof(char) * DESC_SIZE);
-  //  estruct->desc = desc;
 };
 
 void emgr_error2(emgr_err_struct * estruct, emgr_err_type type, uint8_t code){
   estruct->is_error = ERROR;
   estruct->type = type;
   estruct->code = code;
-  memset(estruct->desc, 0, sizeof(estruct->desc));
+  estruct->desc[0] = 0;
 };
 
 
@@ -31,7 +30,7 @@ void emgr_ok(emgr_err_struct * estruct, emgr_err_type type){
   estruct->is_error = OK;
   estruct->type = type;
   estruct->code = 0;
-  memset(estruct->desc, 0, sizeof(estruct->desc));
+  estruct->desc[0] = 0;
 };
   
 // test result on error
