@@ -2,11 +2,20 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
+
+//#define __DEBUG_MODE
+
+#ifdef __DEBUG_MODE
+
+#include "logger.h"
+
+#endif
 
 #ifndef _EMGR_INC
-#define _EMGR_INC 1
 
-#define __DEBUG_MODE 1
+#define _EMGR_INC 
+
 
 // Define error or OK ids for emgr_err_struct->is_error
 #define OK 0
@@ -28,6 +37,7 @@ typedef enum {
   tFSMGR
 } emgr_err_type;
 
+
 typedef struct{ 
   uint8_t is_error;
   emgr_err_type type;
@@ -35,7 +45,7 @@ typedef struct{
   char desc[DESC_SIZE];
 } emgr_err_struct;
 
-emgr_err_struct emgr_struct;
+extern emgr_err_struct emgr_struct;
 
 
 //init error manager
@@ -67,10 +77,12 @@ void emgr_reset(emgr_err_struct * estruct);
 
 // return OK from void function
 #define RET_OK(type) emgr_ok(&emgr_struct, type); \
+  emgr_print_ffl(&emgr_struct, __FILE__, __FUNCTION__, __LINE__);	\
   return
 
 // return ok with result of function
 #define RET_VALUE_OK(type, value) emgr_ok(&emgr_struct, type);	\
+  emgr_print_ffl(&emgr_struct, __FILE__, __FUNCTION__, __LINE__); \
   return value
 
 // return error as result of function. With descriprion
@@ -99,8 +111,6 @@ void emgr_reset(emgr_err_struct * estruct);
 
 // test result on ok
 #define IS_OK emgr_is_ok(&emgr_struct)
-
-
 
 
 #endif

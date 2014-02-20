@@ -1,12 +1,23 @@
 #include "emgr.h"
 #include <stdio.h>
 
-extern emgr_err_struct emgr_struct;
+emgr_err_struct emgr_struct;
+
+const char* TYPE_STRING[] = {
+    "tUndefined", 
+    "tFATFS", 
+    "tFSMGR"
+};
+
+
 
 void init_emgr(){
   //Initialization code
   emgr_reset( &emgr_struct );
 
+#ifdef __DEBUG_MODE
+  logger_initialize();
+#endif
 
 };
 
@@ -64,13 +75,45 @@ void emgr_reset(emgr_err_struct * estruct) {
 void emgr_print(emgr_err_struct * estruct){
 #ifdef __DEBUG_MODE
 
+  char buffer[256] = "";
+  char ErrChar[6];
+  uint8_t str_size = 0;
+
+  format_error(ErrChar, estruct->is_error);
+  
+  str_size = sprintf(buffer, "Result:%s type:%s code:%d\n",
+		     ErrChar, TYPE_STRING[estruct->type], estruct->code);
+  buffer[str_size] = 0;
+  logger_print(str_size, buffer);
+
 #endif
 };
 
 void emgr_print_ffl(emgr_err_struct * estruct, const char * File, const char * Func,  int L){
 #ifdef __DEBUG_MODE
 
-  printf("is_error:%d type:%d code:%d File:%s Func:%s Line:%d\n",
-	 estruct->is_error, estruct->type, estruct->code, File, Func,  L);
+  char buffer[256] = "";
+  char ErrChar[6];
+  uint8_t str_size = 0;
+
+  format_error(ErrChar, estruct->is_error);
+  
+  str_size = sprintf(buffer, "Result:%s type:%s code:%d file:%s func:%s line:%d\n",
+		     ErrChar, TYPE_STRING[estruct->type], estruct->code,
+		     File, Func, Line);
+  buffer[str_size] = 0;
+  logger_print(str_size, buffer);
+
+
 #endif
+};
+
+void format_error(char * ErrChar, uint8_t ErrCode){
+  if (ErrCode == OK){
+    ErrChar = "OK";
+  } else if (ErrCode == ERROR){
+    ErrChar = "Error";
+  } else if (ErrCode == UNDEFINED){
+    ErrChar = "Undef";
+  };
 };
