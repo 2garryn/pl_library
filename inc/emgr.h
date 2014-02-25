@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 
-//#define __DEBUG_MODE
+#define __DEBUG_MODE
 
 #ifdef __DEBUG_MODE
 
@@ -98,7 +98,7 @@ void emgr_reset(emgr_err_struct * estruct);
 // return with error from current function if nested function returned error
 #define RET_ON_PREV_ERROR if(emgr_is_error(&emgr_struct)) {		\
   emgr_print_ffl(&emgr_struct, __FILE__, __FUNCTION__, __LINE__);	  \
-  return; };
+  return; }
 
 // return with error from current function if nested function returned error. Possible to change type and code of error
 #define RET_ON_PREV_ERROR_NC(type, code) if(emgr_is_error(&emgr_struct)){	\
