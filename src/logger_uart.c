@@ -5,7 +5,7 @@
 
 
 void logger_initialize() {
-  init_debug_usart(void);
+  init_debug_usart();
 };
 
 void logger_print(uint8_t str_size, char * str) {

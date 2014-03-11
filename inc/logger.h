@@ -1,4 +1,5 @@
 //Logger header file
+#include <stdint.h>
 
 #ifndef _LOGGER_INC
 #define _LOGGER_INC 1

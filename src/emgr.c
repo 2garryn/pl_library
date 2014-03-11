@@ -1,5 +1,5 @@
 #include "emgr.h"
-#include <stdio.h>
+
 
 emgr_err_struct emgr_struct;
 
@@ -8,7 +8,6 @@ const char* TYPE_STRING[] = {
     "tFATFS", 
     "tFSMGR"
 };
-
 
 
 void init_emgr(){
@@ -89,7 +88,7 @@ void emgr_print(emgr_err_struct * estruct){
 #endif
 };
 
-void emgr_print_ffl(emgr_err_struct * estruct, const char * File, const char * Func,  int L){
+void emgr_print_ffl(emgr_err_struct * estruct, const char * File, const char * Func,  int Line){
 #ifdef __DEBUG_MODE
 
   char buffer[256] = "";
@@ -106,6 +105,10 @@ void emgr_print_ffl(emgr_err_struct * estruct, const char * File, const char * F
 
 
 #endif
+};
+
+void print_msg(char * String) {
+  logger_print(strlen(String), String);
 };
 
 void format_error(char * ErrChar, uint8_t ErrCode){

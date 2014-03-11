@@ -47,6 +47,8 @@ typedef struct{
 
 extern emgr_err_struct emgr_struct;
 
+extern const char * TYPE_STRING[];
+
 
 //init error manager
 void init_emgr();
@@ -74,6 +76,12 @@ uint8_t emgr_is_ok(emgr_err_struct * estruct);
 
 //reset values of error strcut
 void emgr_reset(emgr_err_struct * estruct);
+
+// simple print message to debugger
+void print_msg(char * String);
+
+//format error to string error
+void format_error(char * ErrChar, uint8_t ErrCode);
 
 // return OK from void function
 #define RET_OK(type) emgr_ok(&emgr_struct, type); \
