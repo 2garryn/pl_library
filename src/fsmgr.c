@@ -23,23 +23,30 @@ void init_fsmgr() {
   //try toi update index of files
   update_index();
 
-  //return if index is not update
+  //return if error happened
   RET_ON_PREV_ERROR;
+
+  //return ok
+  RET_OK(tFATFS);
 
 };
 
 
 void update_index() {
+
   
 };
 
 
-void read_file_system(char * path) {
+void read_file_system(char * current_path) {
+  char   path[2048];
   FILINFO fno;
   DIR dir;
   int i;
   char *fn;   /* This function is assuming non-Unicode cfg. */
   char toprint[1024];
+  // we need to work on new path, otherwise will get all thrash in current_path
+  strcpy(path, current_path);
 
   static char lfn[_MAX_LFN + 1];   /* Buffer to store the LFN */
   fno.lfname = lfn;
@@ -54,29 +61,36 @@ void read_file_system(char * path) {
   
   for (;;) {
     fr = f_readdir(&dir, &fno);                   /* Read a directory item */
-    if (fr != FR_OK || fno.fname[0] == 0) {      /* Break on error or end of dir */
+    if (fr != FR_OK) {      /* Break on error or end of dir */
       f_closedir(&dir);  
       RET_ERROR(tFATFS, fr);
     };
     
+    if (fno.fname[0] == 0) {
+      f_closedir(&dir);
+      RET_OK(tFATFS);
+    };
+
     if (fno.fname[0] == '.') continue; 
     fn = *fno.lfname ? fno.lfname : fno.fname;
-    
     if (fno.fattrib & AM_DIR) {                    /* It is a directory */
+
       sprintf(&path[i], "/%s", fn);
+
       // make recursive
       read_file_system(path);
       // if scan_files return error or end of dir
+
       if (IS_ERROR) {
 	f_closedir(&dir); 
-	RET_ON_PREV_ERROR;
+       	RET_ON_PREV_ERROR;
       };
 
       path[i] = 0;
     } else {                                       /* It is a file. */
-      // TODO: insert sending file name to UART
+
       memset(toprint, 0, 1024);
-      sprintf(toprint, "%s/%s\n", path, fn);
+      sprintf(toprint, "file: %s/%s\n\r", path, fn);
       print_msg(toprint);
       
     };

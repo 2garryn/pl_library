@@ -14,9 +14,9 @@ void init_emgr(){
   //Initialization code
   emgr_reset( &emgr_struct );
 
-#ifdef __DEBUG_MODE
+  //#ifdef __DEBUG_MODE
   logger_initialize();
-#endif
+  //#endif
 
 };
 
