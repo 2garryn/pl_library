@@ -69,7 +69,7 @@ void get_next_track(char * next_track) {
   case TRACK_REPEAT: calc_repeat(next_track); break;
   case TRACK_RANDOM: calc_random_next(next_track); break;
   };
-  RET_ON_PREV_ERROR;
+
 };
   
 //get prev track 
@@ -83,7 +83,7 @@ void get_prev_track(char * prev_track) {
   case TRACK_REPEAT: calc_repeat(prev_track); break;
   case TRACK_RANDOM: calc_random_next(prev_track); break;
   };
-  RET_ON_PREV_ERROR;
+
 };
 
 
@@ -102,15 +102,25 @@ void calc_simple_next(char * buff_track){
     ++current_track;
   };
   get_track_by_number(current_track, buff_track);
-  RET_ON_PREV_ERROR;
-  RET_OK(tFSMGR);
+
+};
+
+// get prev track by regular order
+void calc_simple_prev(char * buff_track){
+  if (current_track == 1) {
+    current_track = number_files;
+  }
+  else {
+    --current_track;
+  };
+  get_track_by_number(current_track, buff_track);
+
 };
 
 //get current track
 void calc_repeat(char * buff_track){
   get_track_by_number(current_track, buff_track);
-  RET_ON_PREV_ERROR;
-  RET_OK(tFSMGR);
+
 };
 
 // get random track
@@ -147,7 +157,7 @@ get_track_by_number(unsigned short int track_number, char * buff_name) {
   if(fr != FR_OK) {
     RET_ERROR(tFSMGR, fr);
   };
-  RET_OK(tFSMGR);
+
 };
 
   
